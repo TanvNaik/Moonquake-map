@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Moonquake Map</title>
+
+	  <!-- CSS  -->
+	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+      <link href="./style.css" rel="stylesheet" />
+
+      <!-- cdn links for d3 modules -->
+      <script src="https://cdn.jsdelivr.net/npm/d3-array@3.2.0/dist/d3-array.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/d3-scale@4.0.2/dist/d3-scale.min.js"></script>
+
+      <!-- cdn for globe.gl -->
+      <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.26.5/dist/globe.gl.min.js"></script>
+
+  </head>
+
+  <body>
+	<h1 style="text-align:left"><p style="color:cyan; font-size: 1.5rem;">NASA Space App Challenge</p></h1>
+	<h1 style="text-align:center"><p style="color:cyan"><u>MOONQUAKE DATA 3D MODEL</u></p></h1>
+	
+
+	
+  <div id="globeViz"></div>
+
+	<!--------------------------------------- TIMELINE ----------------------------------------->
+		<div class="timeline">
+			<ul>
+			<li>
+				
+				<div class="left_content" id="1971">
+				<h3>1971 </h3>
+				</div>
+			</li>
+			<li>
+				
+				<div class="left_content" id="1972">
+				<h3>1972 </h3>
+				</div>
+			</li>
+			<li>
+				
+				<div class="left_content" id="1973">
+				<h3>1973 </h3>
+				</div>
+			</li>
+			<li>
+				
+				<div class="left_content" id="1974">
+				<h3>1974 </h3>
+				</div>
+			</li>
+			<li>
+				
+				<div class="left_content" id="1975">
+				<h3>1975 </h3>
+				</div>
+			</li>
+			<li>
+				
+				<div class="left_content" id="1976">
+				<h3>1976 </h3>
+				</div>
+			</li>
+			
+			<div style="clear:both;"></div>
+			</ul>
+		</div>
+
+
+	  <!------------------------------------ MOONQUAKE INFO ------------------------------------------->
+
+		<div class="container  d-flex flex-column justify-content-center">
+			<div class="d-flex flex-column justify-content-center p-3 bg-white w-75  h-50  rounded mb-2 inner-1 ">
+				<div>
+					Latitude: <span id="lat"></span><br/>
+				</div>
+				<div>
+					Longitude: <span id="lng"></span><br/> 
+				</div>
+				<div>
+					Magnitude: <span id="magnitude"></span><br/>
+				</div>
+				<div>
+					Year: <span id="year"></span><br/>
+				</div>
+				<div>
+					Day: <span id="day"></span><br/>
+				</div>
+				<div>
+					Hours: <span id="hour"></span><br/>
+				</div>
+				<div>
+					Minutes: <span id="minute"></span><br/>
+				</div>
+				<div>
+					Seconds: <span id="seconds"></span><br/>
+				</div>
+			</div>
+
+		<!--------------------------------------------NASA ARTICLES------------------------------------- -->
+			<div class="bg-white p-3 rounded w-100 h-50 mt-2  inner-2">
+				<div class="text-center heading">
+					<h5 >Knowledge for the "GEEKS"-_-</h5>
+				</div>
+				<!-- Animation -->
+					<div class="animated-text mt-1">
+						<div class="line "> <a class="text-success" href="https://cseligman.com/text/moons/moonquakes.htm">MOONQUAKES AND EARTHQUAKES</a> </div>
+						<div class="line"><a class="text-warning" href="https://www.nasa.gov/launching-science-and-technology/nasa-to-send-science-experiments-on-the-artemis-i-mission-to-the-moon-and-back/">Science Experiments Traveling on Artemis I</a></div>
+						<div class="line"><a class="text-success" href="https://www.nasa.gov/press-release/goddard/2019/moonquakes">Everything about moonquakes</a></div>
+						<div class="line"><a class="text-warning" href="https://moon.nasa.gov/news/172/what-you-need-to-know-about-the-lunar-eclipse/">What You Need to Know about the Lunar Eclipse</a></div>
+						
+					</div>	
+				</div>
+		</div>
+		<div class="footer" style="color:cyan; font-size: 1rem;">- Team Luna Eclipse</div>
+  <script>
+
+	
+    const element = document.getElementById('globeViz');
+	
+	//setting up the moon
+	const moon = Globe()
+	.height(75 * window.innerHeight / 100)
+	.globeImageUrl('./lunar_surface.jpg')
+		.bumpImageUrl('./lunar_bumpmap.jpg') 
+		.backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+		.showGraticules(true)
+		.showAtmosphere(false) // moon has no atmosphere
+		.labelText('year')
+		.labelSize(2.7)
+		.labelDotRadius(0.4)
+		.labelColor('black')
+		.onLabelClick(d => {
+		document.getElementsByClassName('inner-1')[0].style.visibility = "visible"
+		document.getElementById("lat").textContent = d.lat
+		document.getElementById("lng").textContent = d.lng
+		document.getElementById("magnitude").textContent = d.magnitude
+		document.getElementById("year").textContent = d.year
+		document.getElementById("day").textContent = d.day
+		document.getElementById("hour").textContent = d.hour
+		document.getElementById("minute").textContent = d.minute
+		document.getElementById("seconds").textContent = d.seconds
+		})
+		.ringMaxRadius(d => {
+		if(d.magnitude < 1){
+			return 3
+		}else if( 2 > d.magnitude >= 1){
+			return 6
+		}else{
+			return 8
+		}
+		})
+		.ringColor(() => '#00FFFF' )
+		(element);
+
+
+	// fetching moonquake data, converting it to json format and then adding labels and rings on the moon
+	fetch('./moonquakes.json').then(res => res.json()).then( moonquakes => {
+		
+	  moon.labelsData(moonquakes)
+	  moon.ringsData(moonquakes)
+	})
+
+	 
+  </script>
+  </body>
+</html>
